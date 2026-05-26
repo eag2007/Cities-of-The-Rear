@@ -217,15 +217,6 @@ const AdminPage: React.FC = () => {
           </div>
           <div className="admin-stat-card">
             <div className="admin-stat-icon">
-              <Users />
-            </div>
-            <div className="admin-stat-info">
-              <span className="admin-stat-value">{stats.totalAdmins}</span>
-              <span className="admin-stat-label">Администраторов</span>
-            </div>
-          </div>
-          <div className="admin-stat-card">
-            <div className="admin-stat-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"

@@ -9,6 +9,7 @@ import "./AddCityPage.css";
 import { postCityApi } from "../../Services/CityService";
 import AddCityPageHeader from "../../Components/AddCityPage/AddCityPageHeader/AddCityPageHeader";
 import { useAuth } from "../../Context/useAuth";
+import Editor from "../../Components/Editor/Editor";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -75,39 +76,6 @@ const AddCityPage: React.FC = () => {
     { id: 2, name: "Обмундирование", color: "#8b5cf6" },
     { id: 3, name: "Техника", color: "#f59e0b" },
     { id: 4, name: "Продовольствие", color: "#10b981" },
-  ];
-
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      ["blockquote", "code-block"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [
-        { align: "" },
-        { align: "center" },
-        { align: "right" },
-        { align: "justify" },
-      ],
-      ["link", "image"],
-      ["clean"],
-    ],
-  };
-
-  const quillFormats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "code-block",
-    "list",
-    "bullet",
-    "indent",
-    "align",
-    "link",
-    "image",
   ];
 
   const handleCategoryToggle = (categoryId: number) => {
@@ -438,25 +406,6 @@ const AddCityPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="preview-section">
-              <label className="form-label">Полное описание</label>
-              <div className="quill-wrapper">
-                <ReactQuill
-                  theme="snow"
-                  value={city.longDesc}
-                  onChange={(value) => setCity({ ...city, longDesc: value })}
-                  modules={quillModules}
-                  formats={quillFormats}
-                  placeholder="Введите подробное описание города с использованием форматирования..."
-                  className="city-quill-editor"
-                />
-              </div>
-              <p className="form-hint">
-                Используйте инструменты форматирования для создания
-                структурированного описания
-              </p>
-            </div>
-
             {city.categories.length > 0 && (
               <div className="preview-section">
                 <label className="form-label">Выбранные категории</label>
@@ -479,6 +428,22 @@ const AddCityPage: React.FC = () => {
                 </div>
               </div>
             )}
+          </div>
+
+          <div className="full-description-wrapper">
+            <label className="form-label">Полное описание</label>
+            <div className="quill-wrapper">
+              <Editor
+                value={city.longDesc}
+                onChange={(value) => setCity({ ...city, longDesc: value })}
+                placeholder="Введите подробное описание города с использованием форматирования..."
+                className="city-quill-editor"
+              />
+            </div>
+            <p className="form-hint">
+              Используйте инструменты форматирования для создания
+              структурированного описания
+            </p>
           </div>
         </div>
       </div>

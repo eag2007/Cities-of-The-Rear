@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -14,6 +14,7 @@ import {
 } from "../../Services/CityService";
 import { City, CityPost } from "../../Models/City";
 import { BounceLoader } from "react-spinners";
+import Editor from "../../Components/Editor/Editor";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -89,40 +90,6 @@ const EditCityPage: React.FC = () => {
     { id: 4, name: "Продовольствие", icon: "", color: "#000000" },
   ];
 
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, false] }],
-      ["bold", "italic", "underline", "strike"],
-      ["blockquote", "code-block"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }],
-      [
-        { align: "" },
-        { align: "center" },
-        { align: "right" },
-        { align: "justify" },
-      ],
-      ["link", "image"],
-      ["clean"],
-    ],
-  };
-
-  const quillFormats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "code-block",
-    "list",
-    "bullet",
-    "indent",
-    "align",
-    "link",
-    "image",
-  ];
-
   useEffect(() => {
     if (id) {
       getCity();
@@ -153,6 +120,7 @@ const EditCityPage: React.FC = () => {
         ? prev.categories.filter((id) => id !== categoryId)
         : [...prev.categories, categoryId],
     }));
+    console.log(city);
   };
 
   const handleCoordinateChange = (type: "lat" | "lng", value: string) => {
@@ -180,13 +148,11 @@ const EditCityPage: React.FC = () => {
     const rawValue = e.target.value;
     setNamesInput(rawValue);
 
-    // Разбиваем строку по запятым, обрезаем пробелы, убираем пустые
     const namesArray = rawValue
       .split(",")
       .map((name) => name.trim())
       .filter((name) => name !== "");
 
-    // Обновляем city.names (если массив пуст, оставляем [""] для валидации)
     setCity((prev) => ({
       ...prev,
       names: namesArray.length ? namesArray : [""],
@@ -354,10 +320,10 @@ const EditCityPage: React.FC = () => {
               </p>
               {city.names.length > 0 && city.names[0] !== "" && (
                 <div className="names-preview">
-                  <span className="preview-badge">Будет сохранено:</span>
+                  <span className="preview-badge">Будет сохранено: </span>
                   {city.names.map((name, idx) => (
                     <span key={idx} className="name-tag">
-                      {name}
+                      {name}=
                     </span>
                   ))}
                 </div>
@@ -564,25 +530,6 @@ const EditCityPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="preview-section">
-              <label className="form-label">Полное описание</label>
-              <div className="quill-wrapper">
-                <ReactQuill
-                  theme="snow"
-                  value={city.longDesc}
-                  onChange={(value) => setCity({ ...city, longDesc: value })}
-                  modules={quillModules}
-                  formats={quillFormats}
-                  placeholder="Введите подробное описание города с использованием форматирования..."
-                  className="city-quill-editor"
-                />
-              </div>
-              <p className="form-hint">
-                Используйте инструменты форматирования для создания
-                структурированного описания
-              </p>
-            </div>
-
             {city.categories.length > 0 && (
               <div className="preview-section">
                 <label className="form-label">Выбранные категории</label>
@@ -607,6 +554,22 @@ const EditCityPage: React.FC = () => {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="preview-section bottom-full-description">
+          <label className="form-label">Полное описание</label>
+          <div className="quill-wrapper">
+            <Editor
+              value={city.longDesc}
+              onChange={(value) => setCity({ ...city, longDesc: value })}
+              placeholder="Введите подробное описание города с использованием форматирования..."
+              className="city-quill-editor"
+            />
+          </div>
+          <p className="form-hint">
+            Используйте инструменты форматирования для создания
+            структурированного описания
+          </p>
         </div>
       </div>
 

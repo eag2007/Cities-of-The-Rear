@@ -66,5 +66,9 @@
 }
 
 .leaflet-control-zoom {
-  position: fixed !important;
+  position: absolute !important;  /* revert to Leaflet default */
+  top: auto;
+  left: auto;
+  right: 10px;
+  bottom: 20px;
 }

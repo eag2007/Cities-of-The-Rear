@@ -121,6 +121,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
+  margin-bottom: 32px;
 }
 
 @media (max-width: 1024px) {
@@ -308,6 +309,9 @@
 }
 
 .city-quill-editor .ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   border: 1px solid #f0f0f0;
   border-radius: 12px 12px 0 0;
   background: #fafafa;
@@ -539,6 +543,28 @@
   margin-top: 8px;
 }
 
+.full-description-wrapper {
+  margin-top: 0;
+  width: 100%;
+  grid-column: 1 / -1; /* span full width */
+  order: 2; /* ensure it comes after the grid items if using flex, but grid handles column span */
+}
+
+/* Alternative: if the description is moved outside .edit-grid, we style it directly */
+.bottom-full-description {
+  margin-top: 32px;
+  width: 100%;
+}
+
+/* Ensure the editor inside the bottom section takes full width */
+.bottom-full-description .quill-wrapper .city-quill-editor .ql-container {
+  min-height: 350px;
+}
+
+.bottom-full-description .quill-wrapper .city-quill-editor .ql-editor {
+  min-height: 330px;
+}
+
 @media (max-width: 768px) {
   .coordinates-inputs {
     flex-direction: column;
@@ -616,6 +642,12 @@
   }
 }
 
-.leaflet-control-zoom {
-  position: fixed !important;
+@media (max-width: 1024px) {
+  .edit-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .full-description-wrapper {
+    grid-column: auto;
+  }
 }
